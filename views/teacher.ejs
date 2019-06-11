@@ -1,0 +1,115 @@
+<% include ./partials/header %>
+
+<!-- start the navbar -->
+<nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/teacher/create-quiz">Create Quiz</a>
+    <a class="navbar-brand" href="/teacher/saved-quiz">Saved Quiz</a>
+    <a class="navbar-brand" href="/teacher/published-quiz">Published Quiz</a>
+    <a class="navbar-brand" href="/user/logout">Logout</a>
+</nav>
+<!-- end the navbar -->
+
+<!-- error message -->
+<!-- <div class="col-sm-6 alert-danger" style="display:none" id="flash">You Must Fill All Fileds</div> -->
+
+<!-- display the question saved -->
+<% if(questionsArray.length > 0){ %>
+    <% questionsArray.forEach((question,index) => { %>
+        <div class="col-sm-12">
+            <div>
+                <div class="row">
+                    <p>Q(<%= index+1 %>): <%= question.main %></p>
+                </div>
+            </div>
+    
+            <div>
+                <div class="row">
+                    <p>The Answer: <%= question.correctAnswer %></p>
+                </div>
+            </div>
+    
+            <div>
+                <div class="row">
+                    <p>The Explanation: <%= question.explanation %></p>
+                </div>
+            </div>
+    
+            <div>
+                <div class="row">
+                    <h5>The Possible Answers</h5>
+                    <p class="col-sm-4"><%= question.wrongAnswers[0] %></p>
+                    <p class="col-sm-4"><%= question.wrongAnswers[1] %></p>
+                    <p class="col-sm-4"><%= question.wrongAnswers[2] %></p>
+                </div>
+            </div>
+            <button class="btn btn-primary" name="editQuestion">Edit</button>
+            <form action="/teacher/deleteFromDB" method="POST">
+                <button class="btn btn-danger" name="deleteQuestion" value="<%=index%>">Delete</button>
+            </form>
+            <input type="hidden" id="deleteQuestionFromDB" value="<%= quizId%>">
+        </div>
+
+        <div class="col-sm-12" style="display:none" id="updateForm">
+            <form method="POST" action="/teacher/updateQuestionInArray">
+                <div class="form-group">
+                    <label for="question">Question</label>
+                    <input type="text" class="form-control" placeholder="Enter The Question" name="updateQuestion" value="<%= question.main%>">
+                </div>
+                <div class="form-group">
+                    <label for="correctAnswer">Correct Answer</label>
+                    <input type="text" class="form-control" placeholder="Enter The Correct Answer" name="updateCorrectAnswer" value="<%= question.correctAnswer%>">
+                </div>
+                <div class="form-group">
+                    <label for="explanation">The Explanation</label>
+                    <input type="text" class="form-control" placeholder="Enter The Explanation" name="updateExplanation" value="<%= question.explanation%>">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="index" value="<%= index%>">
+                </div>
+                <div class="form-group">
+                    <label for="possibleAnswers">The Possible Answers</label>
+                    <div class="row">
+                        <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="updateWrongAnswer1" value="<%=question.wrongAnswers[0]%>">
+                        <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="updateWrongAnswer2" value="<%=question.wrongAnswers[1]%>">
+                        <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="updateWrongAnswer3" value="<%=question.wrongAnswers[2]%>">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" name="updateQuestionButton">Update</button>
+            </form>
+        </div>
+        
+        
+    <% }) %>
+<% } %>
+
+<!-- ending question saved -->
+
+<!-- start create question form -->
+<form method="POST">
+    <div class="form-group">
+        <label for="question">Question</label>
+        <input type="text" class="form-control" placeholder="Enter The Question" name="question">
+    </div>
+    <div class="form-group">
+      <label for="correctAnswer">Correct Answer</label>
+      <input type="text" class="form-control" placeholder="Enter The Correct Answer" name="correctAnswer">
+    </div>
+    <div class="form-group">
+      <label for="explanation">The Explanation</label>
+      <input type="text" class="form-control" placeholder="Enter The Explanation" name="explanation">
+    </div>
+    <div class="form-group">
+        <label for="possibleAnswers">The Possible Answers</label>
+        <div class="row">
+            <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="wrongAnswer1">
+            <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="wrongAnswer2">
+            <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="wrongAnswer3">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" name="saveQuestion" id="saveQuestion">Add Question</button>
+  </form>
+<!-- end create question form -->
+
+<button class="btn btn-info"><a href="/teacher/save-quiz">Save Quiz</a></button>
+<button class="btn btn-success"><a href="/teacher/publish-quiz">Publish Quiz</a></button>
+<% include ./partials/footer %>

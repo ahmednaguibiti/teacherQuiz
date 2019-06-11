@@ -1,0 +1,45 @@
+<% include ./partials/header %>
+
+<!-- start the navbar -->
+<nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/teacher/create-quiz">Create Quiz</a>
+    <a class="navbar-brand" href="/teacher/saved-quiz">Saved Quiz</a>
+    <a class="navbar-brand" href="/teacher/published-quiz">Published Quiz</a>
+    <a class="navbar-brand" href="/user/logout">Logout</a>
+</nav>
+<!-- end the navbar -->
+
+<% if(publishQuiz.length > 0){ %>
+    <% publishQuiz.forEach((question,index) => { %>
+        <div class="col-sm-12">
+            <div>
+                <div class="row">
+                    <p>Q(<%= index+1 %>): <%= question.main %></p>
+                </div>
+            </div>
+    
+            <div>
+                <div class="row">
+                    <p>The Answer: <%= question.correctAnswer %></p>
+                </div>
+            </div>
+    
+            <div>
+                <div class="row">
+                    <p>The Explanation: <%= question.explanation %></p>
+                </div>
+            </div>
+    
+            <div>
+                <div class="row">
+                    <h5>The Possible Answers</h5>
+                    <p class="col-sm-4"><%= question.wrongAnswers[0] %></p>
+                    <p class="col-sm-4"><%= question.wrongAnswers[1] %></p>
+                    <p class="col-sm-4"><%= question.wrongAnswers[2] %></p>
+                </div>
+            </div>
+        </div>
+
+    <% }) %> 
+<% } %>
+<% include ./partials/footer %>

@@ -1,0 +1,35 @@
+<% include ./partials/header %>
+
+<!-- start the navbar -->
+<nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/teacher/create-quiz">Create Quiz</a>
+    <a class="navbar-brand" href="/teacher/saved-quiz">Saved Quiz</a>
+    <a class="navbar-brand" href="/teacher/published-quiz">Published Quiz</a>
+    <a class="navbar-brand" href="/user/logout">Logout</a>
+</nav>
+<!-- end the navbar -->
+
+
+<div class="col-sm-12">
+    <div class="row">
+<% if(quizzes.length > 0){ %>
+    <% quizzes.forEach((quiz,index) => { %>
+        
+        <div class="card col-sm-12 col-md-4">
+            <div class="card-body">
+                <h5 class="card-title">Quiz (<%= index+1 %>)</h5>
+                <p class="card-text">(<%= quiz.questions.length %>) Questions</p>
+                <a href="/teacher/quiz-page/<%= quiz._id %>" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+        
+    <% }) %>
+
+<% } %>
+    </div>
+</div>
+
+
+
+<% include ./partials/footer %>
+
