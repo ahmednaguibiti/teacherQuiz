@@ -1,0 +1,138 @@
+*{
+    padding:0;
+    margin:0
+}
+.navbarLinks{
+    background-color:#FFF
+}
+
+/* start add Question Form */
+.addQuestionForm{
+    border:2px solid #CCC;
+    margin-top:30px;
+    padding:20px;
+    text-align:center;
+}
+.addQuestionForm input{
+    width:90%;
+    margin:0 auto;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    -ms-border-radius:5px;
+    -o-border-radius:5px;
+    padding:25px 15px;
+    margin-bottom:10px
+}
+.addQuestionForm #saveQuestion{
+    width:90%;
+    padding:10px 0;
+    font-weight:bold;
+    margin-bottom:20px
+}
+.addQuestionForm > button{
+    width:45%;
+    font-weight:bold
+}
+.addQuestionForm > button a{
+    color:#FFF
+}
+.addQuestionForm > button a:hover{
+    text-decoration: none
+}
+/* end add Question Form */
+
+/* start displayed question div */
+.displayedQuestion{
+    overflow:hidden;
+    text-align:center;
+    padding:20px
+}
+.displayedQuestion .headQuestion{
+    word-wrap: break-word;
+    width:90%;
+    border:1px solid #080;
+    padding:10px 15px;
+    font-weight:bold;
+    font-size:18px;
+    margin-bottom:20px
+}
+.displayedQuestion .headQuestion p{
+    margin:0;
+    text-align:left
+}
+.displayedQuestion .wrongAnswer,
+.displayedQuestion .correctAnswer{
+    width:80%;
+    text-align:left;
+    color:#F00;
+    font-weight:bold
+}
+.displayedQuestion .correctAnswer{
+    color:#080;
+}
+.displayedQuestion .correctAnswer p span:last-child{
+    color:#080;
+}
+.displayedQuestion .wrongAnswer span, 
+.displayedQuestion .correctAnswer span{
+    color:#000
+}
+.displayedQuestion .explanation{
+    width:90%;
+    text-align:left;
+    font-weight:bold
+}
+.displayedQuestion .explanation span{
+    color:#000
+}
+.displayedQuestion .alert-success{
+    padding:10px 20px
+}
+.displayedQuestion button{
+    width:30%;
+    font-weight:bold;
+    font-size:18px;
+}
+.displayedQuestion form:first-of-type{
+    display:inline-block;
+    width:30%
+}
+.displayedQuestion form:first-of-type button{
+    width:100%
+}
+.displayedQuestion hr{
+    width:70%;
+    margin:30px auto;
+    border:1px solid #CCC
+}
+.displayedQuestion #updateFormElement{
+    width:100%
+}
+.displayedQuestion #updateFormElement label{
+    text-align: left;
+    width: 90%;
+    font-weight: bold;
+    font-size: 18px;
+    margin:0
+}
+.displayedQuestion #updateForm input{
+    width:90%;
+    margin:0 auto;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    -ms-border-radius:5px;
+    -o-border-radius:5px;
+    padding:15px 15px;
+    color:#080;
+    font-weight:bold;
+    font-size:18px;
+    margin-bottom:10px
+}
+
+
+
+
+
+/* end displayed question div */

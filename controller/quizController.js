@@ -5,7 +5,7 @@ let questionsArray = [];
 let importantId = null;
 
 
-
+//ajax request toadd question to array
 exports.getAddQuestion = (request,response) => {
     let question = decodeURI(request.body.question);
     let correctAnswer = decodeURI(request.body.correctAnswer);
@@ -19,45 +19,51 @@ exports.getAddQuestion = (request,response) => {
         explanation:explanation,
         wrongAnswers:[wrongAnswer1,wrongAnswer2,wrongAnswer3]
     });
-    // console.log(questionsArray);
-    // response.render("teacher",{"questionsArray":questionsArray});
 }
 
+//to render the questions array to the create quiz page
+exports.postAddQuestionForm = (request,response) => {
+    response.redirect("/teacher/test");
+}
+
+//ajax request to update question in the array
 exports.getUpdateQuestion = (request,response) => {
-    console.log(request.params.index);
-    let questionIndex = request.params.index;
+    let questionIndex = request.body.index;
     questionsArray[questionIndex] = {
-        main: request.params.question,
-        correctAnswer: request.params.correctAnswer,
-        explanation: request.params.explanation,
-        wrongAnswers: [request.params.wrongAnswer1, request.params.wrongAnswer2, request.params.wrongAnswer3]
+        main: decodeURI(request.body.question),
+        correctAnswer: decodeURI(request.body.correctAnswer),
+        explanation: decodeURI(request.body.explanation),
+        wrongAnswers: [decodeURI(request.body.wrongAnswer1), decodeURI(request.body.wrongAnswer2), decodeURI(request.body.wrongAnswer3)]
     }
 }
 
+//to render questions Array after updated
 exports.postUpdateQuestionInArray = (request,response) => {
     response.redirect("/teacher/test");
 }
 
+//ajax request to delete question from array
 exports.getDeleteQuestion = (request,response) => {
-    console.log(request.params.index);
     let questionIndex = request.params.index;
     let filterArray = questionsArray.filter(element => element!=questionsArray[questionIndex]);
     questionsArray = filterArray;
 }
 
+//to render the questions array after deleted question
 exports.postDeleteFromDB = (request,response) => {
     response.redirect("/teacher/test");
 }
 
+//to make questions array is empty to add new quiz
 exports.getCreateQuiz = (request,response) => {
     questionsArray = [];
     importantId = null;
-    console.log(questionsArray);
     response.redirect("/teacher/test");
 }
 
+//render the questions array and flash message
 exports.test = (request,response)=>{
-    response.render("teacher",{questionsArray:questionsArray,quizId:importantId});
+    response.render("teacher",{questionsArray:questionsArray,quizId:importantId,"msg":request.flash("msg")});
 }
 
 
@@ -68,76 +74,110 @@ exports.postCreateQuiz = (request,response) => {
     }).catch(error => console.log(error));
 }
 
+// save the quiz in the database
 exports.getSaveQuiz = (request,response) => {
+    // check if the quiz is exists or not if exist update it
     if(importantId != null){
-        console.log("yarb");
         quizModel.findOne({_id:importantId})
         .then(result => {
-            result.questions = questionsArray;
-            return result.save();
+            if(questionsArray.length == 0){
+                return
+            }else{
+                result.questions = questionsArray;
+                return result.save();
+            }
         })
         .then(result => {
-            importantId = null;
-            response.redirect("/teacher/saved-quiz/")
+            if(result == null){
+                request.flash("msg","you must add at least one question to save quiz");
+                response.redirect("/teacher/create-quiz");
+            }else{
+                importantId = null;
+                response.redirect("/teacher/saved-quiz/");
+            }
         }).catch(error => console.log("can't update quiz in DB"));
-    }else{
-        console.log(importantId);
-        console.log("yarb Tany");
+    }
+    // if the quiz not exist store it in the database
+    else{
         userModel.findOne({email:request.session.email})
         .then(result => {
+            if(questionsArray.length == 0){
+                return;
+            }else{
                 let quiz = new quizModel({
                     userId: result._id,
                     status: 'save',
                     questions: questionsArray
-            });
-            console.log(quiz);
-            quiz.save()
-            .then(result => {
+                });
+                
+                return quiz.save()
+            }
+        })
+        .then(result => {
+            if(result != null){
                 questionsArray = [];
                 response.redirect("/teacher/saved-quiz");
-            }).catch(error => console.log(error));
-        }).catch(error => console.log(error));
+            }else{
+                request.flash("msg","you must add at least one question to save quiz");
+                response.redirect("/teacher/create-quiz");
+            }
+        })
+        .catch(error => console.log(error));
     }
 }
 
-exports.postCreateQuiz = (request,response) => {
-    userModel.findOne({email: request.session.email})
-    .then(result => {
-        response.render("teacher",{"questionsArray":questionsArray});
-    }).catch(error => console.log(error));
-}
 
+// save the quiz as published in the database
 exports.getPublishQuiz = (request,response) => {
+    // check if the quiz is exist or not if exist update it to publish
     if(importantId != null){
-        console.log("yarb");
         quizModel.findOne({_id:importantId})
         .then(result => {
-            result.questions = questionsArray;
-            result.status = "publish";
-            return result.save();
+            if(questionsArray.length == 0){
+                return
+            }else{
+                result.questions = questionsArray;
+                result.status = "publish";
+                return result.save();
+            }
         })
         .then(result => {
-            importantId = null;
-            response.redirect("/teacher/published-quiz/")
+            if(result == null){
+                request.flash("msg","you must add at least one question to save quiz");
+                response.redirect("/teacher/create-quiz");
+            }else{
+                importantId = null;
+                response.redirect("/teacher/published-quiz/");
+            }
         }).catch(error => console.log("can't update quiz in DB"));
-    }else{    
+    }
+    // if the quiz not exist save it as published in the database
+    else{    
         userModel.findOne({email:request.session.email})
         .then(result => {
+            if(questionsArray.length == 0){
+                return;
+            }else{
                 let quiz = new quizModel({
                     userId: result._id,
                     status: 'publish',
                     questions: questionsArray
-            });
-            console.log(quiz);
-            quiz.save()
-            .then(result => {
+                });
+                return quiz.save()
+            }
+        }).then(result => {
+            if(result != null){
                 questionsArray = [];
                 response.redirect("/teacher/published-quiz");
-            }).catch(error => console.log(error));
+            }else{
+                request.flash("msg","you must add at least one question to publish quiz");
+                response.redirect("/teacher/create-quiz");
+            }
         }).catch(error => console.log(error));
     }
 }
 
+// get the saved quizzes from database
 exports.getSavedQuiz = (request,response) => {
     userModel.findOne({email:request.session.email})
     .then(result => {
@@ -148,6 +188,7 @@ exports.getSavedQuiz = (request,response) => {
     }).catch(error => console.log(error)); 
 }
 
+// get the published quizzes from database
 exports.getPublishedQuiz = (request,response) => {
     userModel.findOne({email:request.session.email})
     .then(result => {
@@ -158,6 +199,7 @@ exports.getPublishedQuiz = (request,response) => {
     }).catch(error => console.log(error)); 
 }
 
+// get specific quiz and display it
 exports.getQuizPage = (request,response) => {
     let quizId = request.params.id;
     importantId = quizId;
@@ -168,11 +210,11 @@ exports.getQuizPage = (request,response) => {
     }).catch(error => console.log("no quiz found quizPageController"));
 }
 
+// get specific published quiz and display it
 exports.getPublishQuizPage = (request,response) => {
     let publishQuizId = request.params.id;
     quizModel.findOne({_id:publishQuizId})
     .then(result => {
-        console.log(result);
         response.render("publishQuizPage",{publishQuiz:result.questions});
     }).catch(error => console.log(error));
 }

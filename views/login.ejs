@@ -1,17 +1,20 @@
 <% include ./partials/header %>
 
-<%=msg%>
 
-<form action="/user/login" method="POST">
+
+<div class="loginForm">
+<div class="alert-danger" style="text-align: center;font-size: 20px"><%= msg %></div>
+  <h3>SIGN IN TO YOUR ACCOUNT</h3>
+  <form action="/user/login" method="POST">
     <div class="form-group">
-        <label for="email">Email</label>
         <input type="email" class="form-control" placeholder="Enter Your Email Address" name="email">
     </div>
     <div class="form-group">
-      <label for="Password">Password</label>
       <input type="password" class="form-control" placeholder="Enter Your Password" name="password">
     </div>
-    <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+    <button type="submit" class="btn btn-primary" name="submit">SIGN IN</button>
   </form>
+  <a href="/user/add-user">I Don't HAVE AN ACCOUNT</a>
+</div>
 
 <% include ./partials/footer %>

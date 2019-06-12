@@ -1,0 +1,14 @@
+.navbar{
+    justify-content:center;
+    text-align: center;
+    background-color: #525252 !important 
+}
+.navbar a{
+    float:left;
+    width:15%;
+    color:#FFF !important
+}
+.navbar a:last-of-type{
+    float:right;
+    color:#ffbd39 !important
+}

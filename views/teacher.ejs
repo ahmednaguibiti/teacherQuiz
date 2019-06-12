@@ -7,109 +7,169 @@
     <a class="navbar-brand" href="/teacher/published-quiz">Published Quiz</a>
     <a class="navbar-brand" href="/user/logout">Logout</a>
 </nav>
-<!-- end the navbar -->
+<!-- end the navbar --> 
 
-<!-- error message -->
-<!-- <div class="col-sm-6 alert-danger" style="display:none" id="flash">You Must Fill All Fileds</div> -->
+<!-- flash message that there is no questions to save the quiz -->
+<div class="alert-danger" style="text-align: center;font-size: 20px"><%= msg %></div>
+
+<!-- start the container div -->
+
+<div class="col-sm-12">
+    <div class="row">
+        <!-- start the add question Form div -->
+            <div class="col-sm-5 addQuestionForm">
+
+                <form method="POST" action="/teacher/addQuestionForm/" id="addQuestionForm">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter The Question" name="question">
+                        <!-- when make input empty -->
+                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyQuestion">This Field is Required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter The Correct Answer" name="correctAnswer">
+                        <!-- when make input empty -->
+                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyCorrect">This Field is Required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter The Explanation" name="explanation">
+                        <!-- when make input empty -->
+                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyExplanation">This Field is Required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter The Possible Answer (1)" name="wrongAnswer1">
+                        <!-- when make input empty -->
+                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyWrong1">This Field is Required</div>
+
+                        <input type="text" class="form-control" placeholder="Enter The Possible Answer (2)" name="wrongAnswer2">
+                        <!-- when make input empty -->
+                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyWrong2">This Field is Required</div>
+
+                        <input type="text" class="form-control" placeholder="Enter The Possible Answer (3)" name="wrongAnswer3">
+                        <!-- when make input empty -->
+                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyWrong3">This Field is Required</div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" name="saveQuestion" id="saveQuestion">Add Question</button>
+                </form>
+                    
+                <button class="btn btn-info"><a href="/teacher/save-quiz">Save Quiz</a></button>
+                <button class="btn btn-success"><a href="/teacher/publish-quiz">Publish Quiz</a></button>
+            </div>
+        <!-- end the add question Form Div -->
+
+        <!-- start the div that display questions -->
+
+            <div class="col-sm-7 displayedQuestion">
+
+                <% if(questionsArray.length > 0){ %>
+                    <% questionsArray.forEach((question,index) => { %>
+                        <div class="col-sm-12">
+
+                            <div class="headQuestion">
+                                <p>Q(<%= index+1 %>): <%= question.main %></p>
+                            </div>
+
+                            <div class="wrongAnswer">
+                                <p><span>1- </span> <%= question.wrongAnswers[0] %></p>
+                            </div>
+
+                            <div class="wrongAnswer">
+                                <p><span>2- </span> <%= question.wrongAnswers[1] %></p>
+                            </div>
+
+                            <div class="correctAnswer">
+                                <p><span>3- </span> <%= question.correctAnswer %> <span><i class="fas fa-check"></i></span></p>
+                            </div>
+
+                            <div class="wrongAnswer">
+                                <p><span>4- </span> <%= question.wrongAnswers[2] %></p>
+                            </div>
+                        
+                            <div class="explanation">
+                                <p class="alert-success"><span>The Explanation: </span><%= question.explanation %></p>
+                            </div>    
+                        
+                            <button class="btn btn-primary" name="editQuestion">Edit</button>
+
+                            <form action="/teacher/deleteFromDB" method="POST">
+                                <button class="btn btn-danger" name="deleteQuestion" value="<%=index%>">Delete</button>
+                            </form>
+
+                            <input type="hidden" id="deleteQuestionFromDB" value="<%= quizId%>">
+
+                        </div>
+
+                        <hr>
+
+                        <!-- start update question form -->
+                    
+                        <div class="col-sm-12" style="display:none" id="updateForm">
+
+                            <form method="POST" action="/teacher/updateQuestionInArray" id="updateFormElement">
+
+                                <div class="form-group">
+                                    <label for="question">Question</label>
+                                    <input type="text" class="form-control" placeholder="Enter The Question" name="updateQuestion" value="<%= question.main%>">
+                                    <!-- when make input empty -->
+                                    <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyUpdateQuestion">This Field is Required</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="correctAnswer">Correct Answer</label>
+                                    <input type="text" class="form-control" placeholder="Enter The Correct Answer" name="updateCorrectAnswer" value="<%= question.correctAnswer%>">
+                                    <!-- when make input empty -->
+                                    <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyUpdateCorrect">This Field is Required</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="explanation">The Explanation</label>
+                                    <input type="text" class="form-control" placeholder="Enter The Explanation" name="updateExplanation" value="<%= question.explanation%>">
+                                    <!-- when make input empty -->
+                                    <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyUpdateExplanation">This Field is Required</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="hidden" name="index" value="<%= index%>">
+                                </div>
+
+                                <div class="form-group" id="wrongAnswers">
+                                    <label for="possibleAnswers">The Possible Answers</label>
+                                        <input type="text" class="form-control" placeholder="Enter The Possible Answer" name="updateWrongAnswer1" value="<%=question.wrongAnswers[0]%>">
+                                        <!-- when make input empty -->
+                                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyUpdateWrong1">This Field is Required</div>
+
+                                        <input type="text" class="form-control" placeholder="Enter The Possible Answer" name="updateWrongAnswer2" value="<%=question.wrongAnswers[1]%>">
+                                        <!-- when make input empty -->
+                                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyUpdateWrong2">This Field is Required</div>
+
+                                        <input type="text" class="form-control" placeholder="Enter The Possible Answer" name="updateWrongAnswer3" value="<%=question.wrongAnswers[2]%>">
+                                        <!-- when make input empty -->
+                                        <div class="alert-danger" style="display:none;width:90%;margin:0 auto" id="emptyUpdateWrong3">This Field is Required</div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" name="updateQuestionButton" style="width:90%;margin-bottom:20px">Update</button>
+                            </form>
+                        </div>
+    
+                    <% }) %>
+                <% } %>
+                    
+
+            </div>
+
+        <!-- end the div that display questions -->
+    </div>
+</div>
 
 <!-- display the question saved -->
-<% if(questionsArray.length > 0){ %>
-    <% questionsArray.forEach((question,index) => { %>
-        <div class="col-sm-12">
-            <div>
-                <div class="row">
-                    <p>Q(<%= index+1 %>): <%= question.main %></p>
-                </div>
-            </div>
-    
-            <div>
-                <div class="row">
-                    <p>The Answer: <%= question.correctAnswer %></p>
-                </div>
-            </div>
-    
-            <div>
-                <div class="row">
-                    <p>The Explanation: <%= question.explanation %></p>
-                </div>
-            </div>
-    
-            <div>
-                <div class="row">
-                    <h5>The Possible Answers</h5>
-                    <p class="col-sm-4"><%= question.wrongAnswers[0] %></p>
-                    <p class="col-sm-4"><%= question.wrongAnswers[1] %></p>
-                    <p class="col-sm-4"><%= question.wrongAnswers[2] %></p>
-                </div>
-            </div>
-            <button class="btn btn-primary" name="editQuestion">Edit</button>
-            <form action="/teacher/deleteFromDB" method="POST">
-                <button class="btn btn-danger" name="deleteQuestion" value="<%=index%>">Delete</button>
-            </form>
-            <input type="hidden" id="deleteQuestionFromDB" value="<%= quizId%>">
-        </div>
-
-        <div class="col-sm-12" style="display:none" id="updateForm">
-            <form method="POST" action="/teacher/updateQuestionInArray">
-                <div class="form-group">
-                    <label for="question">Question</label>
-                    <input type="text" class="form-control" placeholder="Enter The Question" name="updateQuestion" value="<%= question.main%>">
-                </div>
-                <div class="form-group">
-                    <label for="correctAnswer">Correct Answer</label>
-                    <input type="text" class="form-control" placeholder="Enter The Correct Answer" name="updateCorrectAnswer" value="<%= question.correctAnswer%>">
-                </div>
-                <div class="form-group">
-                    <label for="explanation">The Explanation</label>
-                    <input type="text" class="form-control" placeholder="Enter The Explanation" name="updateExplanation" value="<%= question.explanation%>">
-                </div>
-                <div class="form-group">
-                    <input type="hidden" name="index" value="<%= index%>">
-                </div>
-                <div class="form-group">
-                    <label for="possibleAnswers">The Possible Answers</label>
-                    <div class="row">
-                        <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="updateWrongAnswer1" value="<%=question.wrongAnswers[0]%>">
-                        <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="updateWrongAnswer2" value="<%=question.wrongAnswers[1]%>">
-                        <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="updateWrongAnswer3" value="<%=question.wrongAnswers[2]%>">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary" name="updateQuestionButton">Update</button>
-            </form>
-        </div>
-        
-        
-    <% }) %>
-<% } %>
 
 <!-- ending question saved -->
 
 <!-- start create question form -->
-<form method="POST">
-    <div class="form-group">
-        <label for="question">Question</label>
-        <input type="text" class="form-control" placeholder="Enter The Question" name="question">
-    </div>
-    <div class="form-group">
-      <label for="correctAnswer">Correct Answer</label>
-      <input type="text" class="form-control" placeholder="Enter The Correct Answer" name="correctAnswer">
-    </div>
-    <div class="form-group">
-      <label for="explanation">The Explanation</label>
-      <input type="text" class="form-control" placeholder="Enter The Explanation" name="explanation">
-    </div>
-    <div class="form-group">
-        <label for="possibleAnswers">The Possible Answers</label>
-        <div class="row">
-            <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="wrongAnswer1">
-            <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="wrongAnswer2">
-            <input type="text" class="form-control col-sm-12 col-md-4" placeholder="Enter The Possible Answer" name="wrongAnswer3">
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary" name="saveQuestion" id="saveQuestion">Add Question</button>
-  </form>
-<!-- end create question form -->
 
-<button class="btn btn-info"><a href="/teacher/save-quiz">Save Quiz</a></button>
-<button class="btn btn-success"><a href="/teacher/publish-quiz">Publish Quiz</a></button>
 <% include ./partials/footer %>

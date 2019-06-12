@@ -11,35 +11,37 @@
 
 <% if(publishQuiz.length > 0){ %>
     <% publishQuiz.forEach((question,index) => { %>
-        <div class="col-sm-12">
-            <div>
-                <div class="row">
-                    <p>Q(<%= index+1 %>): <%= question.main %></p>
-                </div>
+        <div class="col-sm-12 displayedQuestion">
+
+            <div class="headQuestion">
+                <p>Q(<%= index+1 %>): <%= question.main %></p>
             </div>
-    
-            <div>
-                <div class="row">
-                    <p>The Answer: <%= question.correctAnswer %></p>
-                </div>
+
+            <div class="wrongAnswer">
+                <p><span>1- </span> <%= question.wrongAnswers[0] %></p>
             </div>
-    
-            <div>
-                <div class="row">
-                    <p>The Explanation: <%= question.explanation %></p>
-                </div>
+
+            <div class="wrongAnswer">
+                <p><span>2- </span> <%= question.wrongAnswers[1] %></p>
             </div>
-    
-            <div>
-                <div class="row">
-                    <h5>The Possible Answers</h5>
-                    <p class="col-sm-4"><%= question.wrongAnswers[0] %></p>
-                    <p class="col-sm-4"><%= question.wrongAnswers[1] %></p>
-                    <p class="col-sm-4"><%= question.wrongAnswers[2] %></p>
-                </div>
+
+            <div class="correctAnswer">
+                <p><span>3- </span> <%= question.correctAnswer %> <span><i class="fas fa-check"></i></span></p>
             </div>
+
+            <div class="wrongAnswer">
+                <p><span>4- </span> <%= question.wrongAnswers[2] %></p>
+            </div>
+        
+            <div class="explanation">
+                <p class="alert-success"><span>The Explanation: </span><%= question.explanation %></p>
+            </div>    
+
+
         </div>
 
-    <% }) %> 
+        <hr>
+    <% }) %>
 <% } %>
+            
 <% include ./partials/footer %>

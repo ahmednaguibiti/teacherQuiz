@@ -51,35 +51,23 @@ server.use(express.static(path.join(__dirname,"public")));
 
 
 // middleware
+
+// routes for user controller
 server.use("/user",userRoute);
-server.use((request,response,next) => {
+
+server.use((request,response,next)=>{
     if(request.session.loggedIn){
         next();
     }else{
-        console.log("no session");
         response.redirect("/user/login");
     }
-});
+})
+// routes for teacher controller
 server.use("/teacher",teacherRoute);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+server.use((request,response) => {
+    response.redirect("/user/login");
+});
 
 
 
@@ -87,4 +75,7 @@ server.use("/teacher",teacherRoute);
 
 
 // run server : port 3000
-server.listen(3000);
+// server.listen(3000);
+server.listen(process.env.PORT || 3000, function(){
+    console.log('listening on');
+});

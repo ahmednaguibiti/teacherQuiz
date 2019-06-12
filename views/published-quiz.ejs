@@ -15,17 +15,19 @@
 <% if(quizzes.length > 0){ %>
     <% quizzes.forEach((quiz,index) => { %>
         
-        <div class="card col-sm-12 col-md-4">
+        <div class="card col-sm-12 col-md-4 offset-md-1 mb-3 mt-3 savedQuiz">
             <div class="card-body">
                 <h5 class="card-title">Quiz (<%= index+1 %>)</h5>
                 <p class="card-text">(<%= quiz.questions.length %>) Questions</p>
-                <a href="/teacher/publish-quiz-page/<%= quiz._id %>" class="btn btn-primary">Details</a>
+                <a href="/teacher/publish-quiz-page/<%= quiz._id %>" class="btn btn-success">Details</a>
             </div>
         </div>
         
     <% }) %>
 
-<% } %>
+<% }else{ %>
+    <h1>No Quizzes Published Yet</h1>
+    <% } %>
     </div>
 </div>
 
